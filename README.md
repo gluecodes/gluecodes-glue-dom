@@ -18,7 +18,7 @@ npm run generate-component --silent -- https://blackrockdigital.github.io/startb
 Result:
 
 ```javascript
-import { renderVDomTree } from 'glue-codes-glue-dom';
+import { renderVDomTree } from 'gluecodes-glue-dom';
 
 export default (({} = {}) => renderVDomTree('div', (props, $) => {
   props.className = 'collapse navbar-collapse';

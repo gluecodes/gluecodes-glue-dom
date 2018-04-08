@@ -21,10 +21,10 @@ const getComponentEnvelope = () => ({
       source: {
         type: 'StringLiteral',
         extra: {
-          rawValue: 'glue-codes-glue-dom',
-          raw: "'glue-codes-glue-dom'"
+          rawValue: 'gluecodes-glue-dom',
+          raw: "'gluecodes-glue-dom'"
         },
-        value: 'glue-codes-glue-dom'
+        value: 'gluecodes-glue-dom'
       }
     },
     {
