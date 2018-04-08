@@ -1,0 +1,25 @@
+{
+  "name": "gluecodes-glue-dom",
+  "version": "1.0.0",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Krzysztof Czopp",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0"
+  },
+  "dependencies": {
+    "@babel/generator": "^7.0.0-beta.44",
+    "puppeteer": "^1.2.0",
+    "virtual-dom": "^2.1.1"
+  }
+}
