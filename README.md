@@ -20,7 +20,10 @@ Result:
 ```javascript
 import { renderVDomTree } from 'gluecodes-glue-dom';
 
-export default (({} = {}) => renderVDomTree('div', (props, $) => {
+export default (({
+  actionResults: {},
+  actions: {}
+} = {}) => renderVDomTree('div', (props, $) => {
   props.className = 'collapse navbar-collapse';
   props.id = 'navbarResponsive';
   $('ul', (props, $) => {

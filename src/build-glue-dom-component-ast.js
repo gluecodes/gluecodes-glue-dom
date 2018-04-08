@@ -37,7 +37,38 @@ const getComponentEnvelope = () => ({
             type: 'AssignmentPattern',
             left: {
               type: 'ObjectPattern',
-              properties: []
+              properties: [
+                {
+                  type: 'ObjectProperty',
+                  key: {
+                    type: 'Identifier',
+                    name: 'actionResults'
+                  },
+                  computed: false,
+                  value: {
+                    type: 'ObjectPattern',
+                    properties: []
+                  },
+                  kind: 'init',
+                  method: false,
+                  shorthand: false
+                },
+                {
+                  type: 'ObjectProperty',
+                  key: {
+                    type: 'Identifier',
+                    name: 'actions'
+                  },
+                  computed: false,
+                  value: {
+                    type: 'ObjectPattern',
+                    properties: []
+                  },
+                  kind: 'init',
+                  method: false,
+                  shorthand: false
+                }
+              ]
             },
             right: {
               type: 'ObjectExpression',
