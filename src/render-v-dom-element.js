@@ -5,7 +5,9 @@ const renderVDomElement = (
   triggerNestedRenderOrProps = null,
   _createVDomElement = createVDomElement
 ) => {
-  const isItTextNodeRendering = typeof name === 'string' && triggerNestedRenderOrProps === null;
+  const isItTextNodeRendering = (typeof name === 'string' || typeof name === 'number')
+    && triggerNestedRenderOrProps === null;
+
   const isItComponentRendering = typeof name === 'function';
 
   if (isItTextNodeRendering) {
