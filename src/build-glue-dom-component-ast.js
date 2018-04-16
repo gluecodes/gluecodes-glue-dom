@@ -101,7 +101,7 @@ async function buildGlueDomComponentAst({
       'class': 'className'
     };
 
-    const getTagCallExpression = ({
+    const getTagCallHavingChildNodesExpression = ({
       tagName
     } = {}) => ({
       type: 'ExpressionStatement',
@@ -151,6 +151,56 @@ async function buildGlueDomComponentAst({
           }
         ]
       }
+    });
+
+    const getTagCallWithoutChildrenExpression = ({
+      tagName
+    } = {}) => ({
+      type: 'ExpressionStatement',
+      expression: {
+        type: 'CallExpression',
+        callee: {
+          type: 'Identifier',
+          name: '$'
+        },
+        arguments: [
+          {
+            type: 'StringLiteral',
+            extra: {
+              rawValue: tagName,
+              raw: `'${tagName}'`
+            },
+            value: tagName
+          },
+          {
+            type: 'ObjectExpression',
+            properties: []
+          }
+        ]
+      }
+    });
+
+    const getInlinePropObjectPropertyExpression = ({
+      name,
+      value
+    } = {}) => ({
+      type: 'ObjectProperty',
+      key: {
+        type: 'Identifier',
+        name
+      },
+      computed: false,
+      value: {
+        type: 'StringLiteral',
+        extra: {
+          rawValue: value,
+          raw: `'${value}'`
+        },
+        value
+      },
+      kind: 'init',
+      method: false,
+      shorthand: false
     });
 
     const getTextCallExpression = ({
@@ -270,7 +320,35 @@ async function buildGlueDomComponentAst({
         const tagAttrs = domElement.attributes;
         const tagChildren = domElement.childNodes;
 
-        const astTemplate = getTagCallExpression({ tagName });
+        if (tagChildren.length === 0) {
+          const astTemplate = getTagCallWithoutChildrenExpression({ tagName });
+          const propRef = astTemplate.expression.arguments[1].properties;
+          const customAttrObjectProperties = [];
+
+          if (tagAttrs) {
+            for (const tagAttr of tagAttrs) {
+              /*const isItCustomAttr = tagAttr.nodeName.indexOf('-') !== -1;
+
+              if (isItCustomAttr) {
+                customAttrObjectProperties.push(getCustomAttrObjectProperty({
+                  key: tagAttr.nodeName,
+                  value: tagAttr.nodeValue
+                }));
+
+                continue;
+              }*/
+
+              propRef.push(getInlinePropObjectPropertyExpression({
+                name: attrToPropMappings[tagAttr.nodeName] || tagAttr.nodeName,
+                value: tagAttr.nodeValue
+              }));
+            }
+          }
+
+          return astTemplate;
+        }
+
+        const astTemplate = getTagCallHavingChildNodesExpression({ tagName });
         const tagBodyRef = astTemplate.expression.arguments[1].body;
         const bodyExpressions = [];
         const customAttrObjectProperties = [];
