@@ -32,6 +32,14 @@ const renderVDomElement = (
       triggerNestedRenderOrProps(props, nestedRender);
     }
 
+    if (typeof props.onTurnedIntoDom === 'function') {
+      const Hook = function () {};
+      const { onTurnedIntoDom } = props;
+
+      Hook.prototype.hook = node => onTurnedIntoDom({ target: node });
+      props.onTurnedIntoDom = new Hook();
+    }
+
     return createVDomElement(...argsToBePassedToElementCreator);
   }
 
