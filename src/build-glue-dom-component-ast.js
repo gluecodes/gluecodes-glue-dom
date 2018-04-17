@@ -46,12 +46,12 @@ const getComponentEnvelope = () => ({
                   },
                   computed: false,
                   value: {
-                    type: 'ObjectPattern',
-                    properties: []
+                    type: 'Identifier',
+                    name: 'actionResults'
                   },
                   kind: 'init',
                   method: false,
-                  shorthand: false
+                  shorthand: true
                 },
                 {
                   type: 'ObjectProperty',
@@ -61,12 +61,12 @@ const getComponentEnvelope = () => ({
                   },
                   computed: false,
                   value: {
-                    type: 'ObjectPattern',
-                    properties: []
+                    type: 'Identifier',
+                    name: 'actions'
                   },
                   kind: 'init',
                   method: false,
-                  shorthand: false
+                  shorthand: true
                 }
               ]
             },
@@ -316,6 +316,8 @@ async function buildGlueDomComponentAst({
       const processDomElement = ({
         domElement
       } = {}) => {
+        if (!domElement) { return null; }
+
         const tagName = domElement.nodeName.toLowerCase();
         const tagAttrs = domElement.attributes;
         const tagChildren = domElement.childNodes;
@@ -327,7 +329,7 @@ async function buildGlueDomComponentAst({
 
           if (tagAttrs) {
             for (const tagAttr of tagAttrs) {
-              /*const isItCustomAttr = tagAttr.nodeName.indexOf('-') !== -1;
+              const isItCustomAttr = tagAttr.nodeName.indexOf('-') !== -1;
 
               if (isItCustomAttr) {
                 customAttrObjectProperties.push(getCustomAttrObjectProperty({
@@ -336,13 +338,28 @@ async function buildGlueDomComponentAst({
                 }));
 
                 continue;
-              }*/
+              }
 
               propRef.push(getInlinePropObjectPropertyExpression({
                 name: attrToPropMappings[tagAttr.nodeName] || tagAttr.nodeName,
                 value: tagAttr.nodeValue
               }));
             }
+          }
+
+          if (customAttrObjectProperties.length > 0) {
+            propRef.push({
+              type: 'ObjectProperty',
+              key: {
+                type: 'Identifier',
+                name: 'attributes'
+              },
+              computed: false,
+              value: {
+                type: 'ObjectExpression',
+                properties: customAttrObjectProperties
+              }
+            });
           }
 
           return astTemplate;
@@ -414,6 +431,11 @@ async function buildGlueDomComponentAst({
     return buildAst({ selector });
 
   }, pageSelector);
+
+  if (!vDomTreeAst) {
+    await browser.close();
+    return null;
+  }
 
   vDomTreeAst.expression.callee.name = 'renderVDomTree';
 

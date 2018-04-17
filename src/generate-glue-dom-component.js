@@ -7,10 +7,14 @@ async function generateGlueDomComponent({
   pageUrl,
   pageSelector
 } = {}) {
-  const { code } = generate(await buildGlueDomComponentAst({
+  const ast = await buildGlueDomComponentAst({
     pageUrl,
     pageSelector
-  }));
+  });
+
+  if (!ast) { return null; }
+
+  const { code } = generate(ast);
 
   return code;
 }
