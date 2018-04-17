@@ -404,7 +404,9 @@ async function buildGlueDomComponentAst({
 
             if (isItText && !isTextEmpty) {
               bodyExpressions.push(getTextCallExpression({
-                text: nestedElement.nodeValue.replace(/\s+/, ' ')
+                text: nestedElement.nodeValue
+                  .replace(/\s+/, ' ')
+                  .replace(/\n/g, '\\n')
               }));
 
               continue;
