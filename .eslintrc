@@ -1,0 +1,20 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "es6": true,
+    "mocha": true,
+    "node": true
+  },
+  "rules": {
+    "comma-dangle": "off",
+    "max-len": [2, 120, 2, {
+      "ignoreUrls": true,
+      "ignoreComments": true
+    }],
+    "no-continue": "off",
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "no-underscore-dangle": "off",
+    "padded-blocks": "off"
+  }
+}
