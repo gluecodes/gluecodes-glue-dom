@@ -4,7 +4,7 @@ const renderVDomTree = (tagName, nestedRender) => {
   let vDomTree = null;
 
   // eslint-disable-next-line no-shadow
-  ($ => $(tagName, nestedRender))((tagName, render) => {
+  (tag => tag(tagName, nestedRender))((tagName, render) => {
     vDomTree = renderVDomElement(tagName, render);
   });
 
