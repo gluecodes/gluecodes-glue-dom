@@ -114,4 +114,4 @@ const renderVDomElement = (
   return createVDomElement(...creatorArgList);
 };
 
-export default renderVDomElement;
+module.exports = renderVDomElement;

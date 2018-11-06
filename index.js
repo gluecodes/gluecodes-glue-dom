@@ -1,4 +1,4 @@
-const createRenderer = require('./src/create-renderer').default;
+const createRenderer = require('./src/create-renderer');
 const generateGlueDomComponent = require('./src/generate-glue-dom-component');
 const initDom = require('./src/init-dom');
 const renderVDomTree = require('./src/render-v-dom-tree');

@@ -1,4 +1,4 @@
-import renderVDomElement from './render-v-dom-element';
+const renderVDomElement = require('./render-v-dom-element');
 
 const renderVDomTree = (tagName, nestedRender, config) => {
   let vDomTree = null;
@@ -11,4 +11,4 @@ const renderVDomTree = (tagName, nestedRender, config) => {
   return vDomTree;
 };
 
-export default renderVDomTree;
+module.exports = renderVDomTree;
