@@ -5,7 +5,7 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Krzysztof Czopp",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/main.bundle.js",
   "browser": "./dist/main.bundle.js",
   "scripts": {
     "build": "./node_modules/.bin/webpack --config ./webpack.config.js --mode development",
@@ -26,12 +26,10 @@
     "eslint-plugin-import": "latest",
     "eslint-plugin-jsx-a11y": "latest",
     "eslint-plugin-react": "latest",
-    "puppeteer": "^1.2.0",
     "webpack": "^4.25.0",
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "@babel/generator": "^7.0.0-beta.44",
     "virtual-dom": "git+ssh://git@github.com/gluecodes/virtual-dom.git"
   }
 }

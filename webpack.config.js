@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    main: './index-browser.js'
+    main: './index.js'
   },
   module: {
     rules: [

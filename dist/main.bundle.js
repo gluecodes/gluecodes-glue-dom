@@ -91,19 +91,19 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./index-browser.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./index-browser.js":
-/*!**************************!*\
-  !*** ./index-browser.js ***!
-  \**************************/
+/***/ "./index.js":
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var createRenderer = __webpack_require__(/*! ./src/create-renderer */ \"./src/create-renderer.js\");\n\nvar initDom = __webpack_require__(/*! ./src/init-dom */ \"./src/init-dom.js\");\n\nvar renderVDomTree = __webpack_require__(/*! ./src/render-v-dom-tree */ \"./src/render-v-dom-tree.js\");\n\nvar updateDom = __webpack_require__(/*! ./src/update-dom */ \"./src/update-dom.js\");\n\nmodule.exports = {\n  createRenderer: createRenderer,\n  initDom: initDom,\n  renderVDomTree: renderVDomTree,\n  updateDom: updateDom\n};\n\n//# sourceURL=webpack:///./index-browser.js?");
+eval("var createRenderer = __webpack_require__(/*! ./src/create-renderer */ \"./src/create-renderer.js\");\n\nvar initDom = __webpack_require__(/*! ./src/init-dom */ \"./src/init-dom.js\");\n\nvar renderVDomTree = __webpack_require__(/*! ./src/render-v-dom-tree */ \"./src/render-v-dom-tree.js\");\n\nvar updateDom = __webpack_require__(/*! ./src/update-dom */ \"./src/update-dom.js\");\n\nmodule.exports = {\n  createRenderer: createRenderer,\n  initDom: initDom,\n  renderVDomTree: renderVDomTree,\n  updateDom: updateDom\n};\n\n//# sourceURL=webpack:///./index.js?");
 
 /***/ }),
 
