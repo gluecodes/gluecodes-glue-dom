@@ -1,15 +1,7 @@
 const h = require('virtual-dom/h');
 
 const defaultVDomCreator = (name, props, ...children) => h(name, props, children);
-
-const defaultPropEnhancers = {
-  onTurnedIntoDom: (prop) => {
-    const Hook = function Hook() {};
-
-    Hook.prototype.hook = node => prop({ target: node });
-    return { onTurnedIntoDom: new Hook() };
-  }
-};
+const defaultPropEnhancers = {};
 
 const renderVDomElement = (
   name,
