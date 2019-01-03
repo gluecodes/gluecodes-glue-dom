@@ -7,3 +7,4 @@ services:
     command: "tail -f /dev/null"
     volumes:
       - .:/src/gluecodes-glue_dom:rw
+      - /src/gluecodes-glue-dom/node_modules
