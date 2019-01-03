@@ -6,4 +6,4 @@ services:
     container_name: gluecodes_glue_dom
     command: "tail -f /dev/null"
     volumes:
-      - .:/src/gluecodes-glue_dom
+      - .:/src/gluecodes-glue_dom:rw
