@@ -1,9 +1,11 @@
-import createRenderer from './src/create-renderer'
-import createVirtualDomEnhancer from './src/create-virtual-dom-enhancer'
-import renderVDomTree from './src/render-v-dom-tree'
+import createRenderer from './src/createRenderer'
+import createVirtualDomEnhancer from './src/createVDomEnhancer'
+import renderVDomElement from './src/renderVDomElement'
+import renderVDomTree from './src/renderVDomTree'
 
 export {
   createRenderer,
   createVirtualDomEnhancer,
+  renderVDomElement,
   renderVDomTree
 }

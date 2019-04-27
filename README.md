@@ -77,20 +77,35 @@ createRenderer(config)
 - `config` (optional) An object containing configuration
   - `config.createVDomElement` (optional) A function used to create virtual DOM element. By default `virtual-dom/h` module is used. 
   When specified, it should implement HyperScript-like interface/API   
-  - `config.formatters` An object of functions. They may be used in `text()` to wrap given string into `tag` with `props` of `config.formatters[formatterName]() => (tag, props)`
+  - `config.formatters` An object of functions. They may be used in `text()` to wrap given string into `tag` with `props` of `config.formatters[formatterName]() => ({ tag, props })`
     - `formatterName` A string identifying a formatter which may be used in `text()` like `text({ [formatterName]: 'given string' })`
     - `tag` A string that specifies the type of element to be used for text wrapping
     - `props` An object of props to be set on the wrapping element
-  - `config.propEnhancers` An object of functions. They may be used to capture a prop assignation in order to rewrite a tag `props` object. 
-  It's done by assigning a `prop` on tag `props`, then if one exists in `config.propEnhancers`, the prop is passed to: `config.propEnhancers[enhancerName](prop) => (reassignedProps)`
-    - `prop` A mixed value of a prop being assigned  
+  - `config.propEnhancers` An object of functions. They may be used to capture a prop assignation in order to rewrite a tag props object. 
+  It's done by assigning a `prop` on tag props, then if one exists in `config.propEnhancers`, 
+  the prop is passed to: `config.propEnhancers[enhancerName](propValue) => ([reassignedProps])`
+    - `propValue` A mixed value of a prop being assigned  
     - `enhancerName` A string identifying a propEnhancer which should match a prop name to be "enhanced"
+    - `reassignedProps` An object to be merged into given tag props
 
 createVirtualDomEnhancer()
 
 ```javascript
-createVirtualDomEnhancer()
+createVDomEnhancer({
+  customFilter,
+  enhance,
+  filesToLoad,
+  name
+})
 ```
+
+- `createVirtualDomEnhancer()` A function to create a prop enhancer that have access to created DOM node. It uses `virtual-dom` hook mechanism (https://github.com/Matt-Esch/virtual-dom/blob/master/docs/hooks.md)
+  - `customFilter` A function to determine whether `enhance()` should be called (`({ node, propValue }) => Boolean`)
+  - `enhance` A function...
+  - `filesToLoad` An object...
+  - `name` A string used for the name of a `virtual-dom` hook prop
+  
+WIP
 
 
 ### Readability & maintainability
@@ -181,8 +196,8 @@ export default createRenderer({
         node.focus()
       }
     }),
-    href: (prop) => {
-      if (!/^\//.test(prop)) { return {} }
+    href: (propValue) => {
+      if (!/^\//.test(propValue)) { return {} }
 
       return {
         onclick (e) {
@@ -196,8 +211,8 @@ export default createRenderer({
       filesToLoad: {
         googleRecaptchaApi: 'https://www.google.com/recaptcha/api.js?render=explicit'
       },
-      enhance ({ node, props }) {
-        global.grecaptcha.ready(() => global.grecaptcha.render(node, props))
+      enhance ({ node, propValue }) {
+        global.grecaptcha.ready(() => global.grecaptcha.render(node, propValue))
       }
     })
   }
@@ -223,7 +238,7 @@ export default ({
 })
 ```
 
-#### Referencing generated DOM elements
+#### Enhancing props and referencing generated DOM elements
 
 Setting autofocus on a text input
 
@@ -247,11 +262,11 @@ Specifying a link which uses browser history.pushState()
 import tag from './renderer'
 
 export default () => tag('div', (props, { tag }) => {
-  tag('a', (props, ({ text }) => {
+  tag('a', (props, { text }) => {
     props.href = '/about' // see renderer.propEnhancers.href
 
     text('some SPA link')
-  }))
+  })
 })
 ```
 

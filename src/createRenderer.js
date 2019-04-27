@@ -1,3 +1,3 @@
-import renderVDomTree from './render-v-dom-tree'
+import renderVDomTree from './renderVDomTree'
 
 export default (config = {}) => (...args) => renderVDomTree(...args, config)

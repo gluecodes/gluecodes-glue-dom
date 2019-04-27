@@ -4,10 +4,14 @@ const defaultVDomCreator = (name, props, ...children) => h(name, props, children
 const defaultPropEnhancers = {}
 
 const renderVDomElement = (
-  name,
+  tagName,
   nestedRenderOrProps = null,
   config = {}
 ) => {
+  if (typeof tagName !== 'string' || !tagName) {
+    throw new Error('\'tagName\' must be provided')
+  }
+
   const {
     createVDomElement = defaultVDomCreator,
     formatters = {},
@@ -16,7 +20,7 @@ const renderVDomElement = (
 
   const isSecondArgNestedRenderHook = typeof nestedRenderOrProps === 'function'
   const renderedElementProps = isSecondArgNestedRenderHook ? {} : (nestedRenderOrProps || {})
-  const creatorArgList = [name, renderedElementProps]
+  const creatorArgList = [tagName, renderedElementProps]
 
   if (isSecondArgNestedRenderHook) {
     nestedRenderOrProps(renderedElementProps, {

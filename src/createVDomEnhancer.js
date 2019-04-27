@@ -3,14 +3,14 @@ export default ({
   enhance,
   filesToLoad = {},
   name
-}) => (props) => {
-  if (!props) { return {} }
+}) => (propValue) => {
+  if (!propValue) { return {} }
 
   const Hook = function Hook () {}
   const nodeInitIndicatorClass = 'gc-enhanced-node'
 
   Hook.prototype.hook = async (node) => {
-    if (typeof customFilter === 'function' && !customFilter({ node, props })) { return }
+    if (typeof customFilter === 'function' && !customFilter({ node, propValue })) { return }
     if (typeof customFilter !== 'function' && (!node.isConnected || node.classList.contains(nodeInitIndicatorClass))) {
       return
     }
@@ -20,12 +20,10 @@ export default ({
     node.classList.add(nodeInitIndicatorClass)
 
     try {
-      // eslint-disable-next-line no-restricted-syntax
       for (const fileId of fileIds) {
         const fileUri = filesToLoad[fileId]
         const scriptLoadIndicatorId = `gc-external-script-${fileId}`
 
-        // eslint-disable-next-line no-await-in-loop
         await (async () => new Promise((resolve, reject) => {
           if (global.document.getElementById(scriptLoadIndicatorId)) {
             resolve()
@@ -52,12 +50,11 @@ export default ({
       }
     } catch (err) {
       node.classList.remove(nodeInitIndicatorClass)
-      // eslint-disable-next-line no-console
       console.error(err)
       return
     }
 
-    enhance({ node, props })
+    enhance({ node, propValue })
   }
 
   return { [name]: new Hook() }

@@ -1,4 +1,4 @@
-import renderVDomElement from './render-v-dom-element'
+import renderVDomElement from './renderVDomElement'
 
 export default (tagName, nestedRender, config) => {
   let vDomTree = null;
