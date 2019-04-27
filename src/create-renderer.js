@@ -1,3 +1,3 @@
-const renderVDomTree = require('./render-v-dom-tree');
+import renderVDomTree from './render-v-dom-tree'
 
-module.exports = config => (...args) => renderVDomTree(...args, config);
+export default (config = {}) => (...args) => renderVDomTree(...args, config)
