@@ -1,13 +1,9 @@
-const createRenderer = require('./src/create-renderer');
-const createVirtualDomEnhancer = require('./src/create-virtual-dom-enhancer');
-const initDom = require('./src/init-dom');
-const renderVDomTree = require('./src/render-v-dom-tree');
-const updateDom = require('./src/update-dom');
+import createRenderer from './src/createRenderer'
+import createVirtualDomEnhancer from './src/createVDomEnhancer'
+import renderVDomElement from './src/renderVDomElement'
 
-module.exports = {
+export {
   createRenderer,
   createVirtualDomEnhancer,
-  initDom,
-  renderVDomTree,
-  updateDom
-};
+  renderVDomElement
+}

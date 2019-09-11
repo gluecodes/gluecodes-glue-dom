@@ -1,35 +1,36 @@
 {
-  "name": "gluecodes-glue-dom",
+  "name": "@gluecodes/glue-dom",
   "version": "1.0.0",
-  "private": true,
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Krzysztof Czopp",
-  "description": "",
+  "description": "Makes non-trivial UI components easy to read and maintain",
   "main": "./dist/main.bundle.js",
   "browser": "./dist/main.bundle.js",
   "scripts": {
-    "build": "./node_modules/.bin/webpack --config ./webpack.config.js --mode development",
-    "generate-component": "node ./scripts/generate-component",
+    "build": "webpack --config ./webpack.config.js --mode production",
     "lint": "eslint index.js ./src/*.js --env es6",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "mocha './test/**/*.test.js'"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
-    "acorn": "^6.0.4",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
-    "eslint": "latest",
-    "eslint-config-airbnb": "latest",
-    "eslint-loader": "^2.0.0",
-    "eslint-plugin-import": "latest",
-    "eslint-plugin-jsx-a11y": "latest",
-    "eslint-plugin-react": "latest",
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-loader": "latest",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "mocha": "^6.1.4",
+    "sinon": "^7.3.2",
     "webpack": "^4.25.0",
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "virtual-dom": "git+ssh://git@github.com/gluecodes/virtual-dom.git"
+    "virtual-dom": "^2.1.1"
   }
 }
