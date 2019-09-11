@@ -106,7 +106,7 @@ import { createRenderer } from '@gluecodes/glue-dom'
 export default createRenderer()
 ```
 
-reusableHtmlPiece.js
+reusableUiPiece.js
 
 ```javascript
 import tag from './renderer'
@@ -121,11 +121,11 @@ hostComponent.js
 
 ```javascript
 import tag from './renderer'
-import reusableHtmlPiece from 'reusableHtmlPiece'
+import reusableUiPiece from './reusableUiPiece'
 
 export default () => tag('div', (props, { component }) => {
-  component(reusableHtmlPiece, { // rendering reusable HTML
-    someProp: 'some value' // passing props to reusable reusableHtmlPiece() function
+  component(reusableUiPiece, { // rendering reusable HTML
+    someProp: 'some value' // passing props to reusable reusableUiPiece() function
   })  
 })
 ```

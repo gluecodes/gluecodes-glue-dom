@@ -5,7 +5,7 @@ Makes non-trivial UI components easy to read and maintain.
 
 - gradual learning curve, no need to learn another templating syntax (directives etc.)
 - reads sequentially as HTML while remaining readable and maintainable
-- isn't a mix of HTML and JavaScript, drawing a clear line between view and logic
+- isn't a mix of HTML and JavaScript drawing a clear border between view and logic
 - allows to format texts without writing nested inline tags
 - makes writing dynamic texts easier with no need for checking whether variables are non-empty
 - provides an intuitive way to reference generated DOM elements e.g. to `.focus()`
@@ -40,11 +40,25 @@ No child elements nor props/attributes
 tag(tagName)
 ```
 
+Components
+
+```
+component(reusableUiPiece, props)
+```
+
+Text
+
+```
+text(...[textChunk,])
+```
+
 - `tagName` A string that specifies the type of element to be created 
 - `props` An object to assign element props/attributes
 - `component` A function to render component
 - `tag` A function to create an element
 - `text` A function to create text
+- `reusableUiPiece` A function returning reusable virtual DOM
+- `textChunk` Either a string or an object which uses text formatters (see below). If any chunk is empty, the whole sentence won't be rendered
 
 ### Basic usage
 
@@ -75,7 +89,7 @@ createRenderer(config)
 
 - `createRenderer()` A function to create initial `tag()` function based on provided `config`
 - `config` (optional) An object containing configuration
-  - `config.createVDomElement` (optional) A function used to create virtual DOM element. By default `virtual-dom/h` module is used. 
+  - `config.createVDomElement` (optional) A function to create virtual DOM element. By default `virtual-dom/h` module is used. 
   When specified, it should implement HyperScript-like interface/API   
   - `config.formatters` An object of functions. They may be used in `text()` to wrap given string into `tag` with `props` of `config.formatters[formatterName]() => ({ tag, props })`
     - `formatterName` A string identifying a formatter which may be used in `text()` like `text({ [formatterName]: 'given string' })`
@@ -85,7 +99,7 @@ createRenderer(config)
   It's done by assigning a `prop` on tag props, then if one exists in `config.propEnhancers`, 
   the prop is passed to: `config.propEnhancers[enhancerName](propValue) => ([reassignedProps])`
     - `propValue` A mixed value of a prop being assigned  
-    - `enhancerName` A string identifying a propEnhancer which should match a prop name to be "enhanced"
+    - `enhancerName` A string identifying a propEnhancer which should match a prop name to be "emphasized"
     - `reassignedProps` An object to be merged into given tag props
 
 createVirtualDomEnhancer()
@@ -118,8 +132,8 @@ GlueDOM
 tag('div', (props, { tag }) => {
   if (someCondition) {
     tag('p', (props, { text }) => {
-      text({ enhanced: firstProgrammer }, ', you\'re going to do pair-programming with ', secondProgrammer, '.')
-      text({ enhanced: firstProgrammer }, ', you\'ll code this task by yourself.')
+      text({ emphasized: firstProgrammer }, ', you\'re going to do pair-programming with ', secondProgrammer, '.')
+      text({ emphasized: firstProgrammer }, ', you\'ll code this task by yourself.')
 
       if (!firstProgrammer && !secondProgrammer) {
         text('Hey man! Can you tell us your name before we give you job to do?')
@@ -180,7 +194,7 @@ import styles from './textFormatters.css'
 
 export default createRenderer({
   formatters: {
-    enhanced: () => ({
+    emphasized: () => ({
       tag: 'strong',
       props: { className: styles.bold }
     }),
@@ -231,9 +245,9 @@ export default ({
   surname
 }) => tag('p', (props, { text }) => {
   text(
-    'You can e.g. format an email like this: "', { enhanced: { italic: email } },
+    'You can e.g. format an email like this: "', { emphasized: { italic: email } },
     '" and the whole sentence will appear only if the email, firstName: ', firstName, ' and surname: ', surname, 'aren\'t empty. ',
-    'It can be especially useful when generating documents from ', { enhanced: 'dynamic' }, ' fields coming from backend.'
+    'It can be especially useful when generating documents from ', { emphasized: 'dynamic' }, ' fields coming from backend.'
   )
 })
 ```
