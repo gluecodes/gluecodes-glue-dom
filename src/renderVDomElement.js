@@ -24,7 +24,15 @@ const renderVDomElement = (
 
   if (isSecondArgNestedRenderHook) {
     nestedRenderOrProps(renderedElementProps, {
-      component: (component, ...args) => creatorArgList.push(component(...args)) && undefined,
+      component: (component, props) => {
+        const vDomNode = component(props)
+
+        if (props && props.as) {
+          vDomNode.properties.className = `${vDomNode.properties.className || ''} gc-role-${props.as}`.trim()
+        }
+
+        creatorArgList.push(vDomNode)
+      },
       tag: (...args) => creatorArgList.push(renderVDomElement(...args, config)) && undefined,
       text: (...args) => {
         const { shouldRender, chunks } = args.reduce((acc, chunk) => {
