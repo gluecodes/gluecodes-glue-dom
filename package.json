@@ -1,11 +1,11 @@
 {
-  "name": "@gluecodes/glue-dom",
+  "name": "@gluecodes/glueDom",
   "version": "1.0.0",
   "license": "SEE LICENSE IN LICENSE.md",
-  "author": "Krzysztof Czopp",
+  "author": "GlueCodes LTD",
   "description": "Makes non-trivial UI components easy to read and maintain",
-  "main": "./dist/main.bundle.js",
-  "browser": "./dist/main.bundle.js",
+  "main": "dist/main.bundle.js",
+  "browser": "dist/main.bundle.js",
   "scripts": {
     "build": "webpack --config ./webpack.config.js --mode production",
     "lint": "eslint index.js ./src/*.js --env es6",
