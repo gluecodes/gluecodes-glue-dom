@@ -79,7 +79,7 @@ const renderVDomElement = (
           const isItUnformattedChunk = !(chunk instanceof Object && chunk.constructor.name === 'Object')
 
           if (isItUnformattedChunk) {
-            acc.shouldRender = acc.shouldRender && !!chunk
+            acc.shouldRender = acc.shouldRender && (!!chunk || chunk === 0)
             acc.chunks.push({ wrappers, value: chunk })
             return acc
           }
