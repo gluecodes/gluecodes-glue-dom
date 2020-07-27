@@ -33,7 +33,7 @@ const renderVDomElement = (
 
         creatorArgList.push(vDomNode)
       },
-      tag: (...args) => creatorArgList.push(renderVDomElement(...args, config)) && undefined,
+      tag: (...args) => creatorArgList.push(renderVDomElement(...(args.length === 2 ? args : [args[0], null]), config)) && undefined,
       text: (...args) => {
         const { shouldRender, chunks } = args.reduce((acc, chunk) => {
           const wrappers = []
