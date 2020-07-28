@@ -25,13 +25,7 @@ const renderVDomElement = (
   if (isSecondArgNestedRenderHook) {
     nestedRenderOrProps(renderedElementProps, {
       component: (component, props) => {
-        const vDomNode = component(props)
-
-        if (props && props.as) {
-          vDomNode.properties.className = `${vDomNode.properties.className || ''} gc-role-${props.as}`.trim()
-        }
-
-        creatorArgList.push(vDomNode)
+        creatorArgList.push(component(props))
       },
       tag: (...args) => creatorArgList.push(renderVDomElement(...(args.length === 2 ? args : [args[0], null]), config)) && undefined,
       text: (...args) => {
