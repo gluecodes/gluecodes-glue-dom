@@ -47,20 +47,20 @@ jobs:
       - restore_cache:
           key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run:
-          name: delete versions.json if exists
-          command: rm -f ~/gluecodes-glue-dom/versions.json
+          name: delete libVersions.json if exists
+          command: rm -f ~/gluecodes-glue-dom/libVersions.json
       - run:
-          name: download versions.json
-          command: aws s3 sync s3://gluecodes-components/ ~/gluecodes-glue-dom --exclude '*' --include 'versions.json'
+          name: download libVersions.json
+          command: aws s3 sync s3://gluecodes-components/ ~/gluecodes-glue-dom --exclude '*' --include 'libVersions.json'
       - run:
           name: pack components
           command: node ~/gluecodes-glue-dom/scripts/packComponents.js
       - run:
-          name: push new versions of components and versions.json backup
+          name: push new versions of components and libVersions.json backup
           command: aws s3 cp ~/gluecodes-glue-dom/dist/packages/ s3://gluecodes-components/ --acl public-read --recursive --exclude '*' --include '*.tar.gz'
       - run:
-          name: push updated versions.json
-          command: aws s3 cp ~/gluecodes-glue-dom/versions.json s3://gluecodes-components/versions.json --acl public-read
+          name: push updated libVersions.json
+          command: aws s3 cp ~/gluecodes-glue-dom/libVersions.json s3://gluecodes-components/libVersions.json --acl public-read
 
 workflows:
   version: 2
