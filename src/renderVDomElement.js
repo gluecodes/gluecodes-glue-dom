@@ -1,7 +1,6 @@
 import h from 'virtual-dom/h'
 
 const defaultVDomCreator = (name, props, ...children) => h(name, props, children)
-const defaultPropEnhancers = {}
 
 const renderVDomElement = (
   tagName,
@@ -14,8 +13,7 @@ const renderVDomElement = (
 
   const {
     createVDomElement = defaultVDomCreator,
-    formatters = {},
-    propEnhancers = defaultPropEnhancers
+    formatters = {}
   } = config
 
   const isSecondArgNestedRenderHook = typeof nestedRenderOrProps === 'function'
@@ -100,14 +98,6 @@ const renderVDomElement = (
       }
     })
   }
-
-  Object.keys(propEnhancers).forEach((targetPropName) => {
-    const enhancer = propEnhancers[targetPropName]
-
-    if (typeof enhancer !== 'function') { return }
-
-    Object.assign(renderedElementProps, enhancer(renderedElementProps[targetPropName]))
-  })
 
   return createVDomElement(...creatorArgList)
 }

@@ -1,152 +1,58 @@
 # @gluecodes
+
 ## GlueDOM
 
 Makes non-trivial UI components easy to read and maintain.
 
-- gradual learning curve, no need to learn another templating syntax (directives etc.)
-- reads sequentially as HTML while remaining readable and maintainable
-- isn't a mix of HTML and JavaScript drawing a clear border between view and logic
-- allows to format texts without writing nested inline tags
-- makes writing dynamic texts easier with no need for checking whether variables are non-empty
-- provides an intuitive way to reference generated DOM elements e.g. to `.focus()`
-- is made to facilitate reusing existing libs and APIs
-	- integration with third-party libs to enhance generated DOM, e.g. to use Google ReCaptcha or jQuery plugins
-	- creating links for SPA websites
-	
-### Syntax 
+<p align="center"><img width="100%" src="https://github.com/gluecodes/gluecodes-glue-dom/blob/master/glue-dom.png" alt="GlueDOM"></p>
 
-Nesting
+- Gradual learning curve, no need to learn another templating syntax (directives etc.).
+- Reads sequentially as HTML while remaining readable and maintainable.
+- Isn't a mix of HTML and JavaScript drawing a clear border between view and logic.
+- Allows to format texts without writing nested inline tags.
+- Makes writing dynamic texts easier with no need for checking whether variables are non-empty.
 
-```
-tag(tagName, (props, { component, tag, text }) => { 
-  tag(tagName, (props, { component, tag, text }) => { 
-    tag(tagName, (props, { component, tag, text }) => { 
-      ...
-    })
-  })
-})
-```
+### Table of Contents
 
-No child elements
+- [Problem](#problem)
+- [Syntax Comparison](#syntax-comparison)
+  - [JSX](#jsx)
+  - [HyperScript](#hyperscript)
+  - [GlueDOM](#gluedom)
+- [Installation](#installation)
+- [Basic Usage](#basic-usage)
+- [Advanced Usage](#advanced-usage)
+- [GlueDOM Syntax](#gluedom-syntax)
+  - [Rendering a Tag](#rendering-a-tag)
+  - [Inside Tag Callback](#inside-tag-callback)
+- [Api](#api)
+- [Contributing](#contributing)
+- [License](#license)
 
-```
-tag(tagName, {
-  [props]
-})
-```
+### Problem
 
-No child elements nor props/attributes
-```
-tag(tagName)
-```
+The ideal syntax for rendering Virtual DOM should mimic HTML in a way it reads sequentially from top to bottom.
+For single logical UI unit, there shouldn't be a need for local variable declarations or using partial functions. 
 
-Components
+Consider the two most common ways of rendering Virtual DOM; JSX and HyperScript. They work well in simple demo scenarios with no nested conditional logic. 
+When the nested conditionals are required, you end up using a mix of logical expressions, ternary and spread operators.
 
-```
-component(reusableUiPiece, props)
-```
+### Syntax Comparison
 
-Text
+Consider the following example; Write a function which renders condition-based HTML. 
+There is `someCondition` prop which needs to be truthy to display a section which contains other nested conditionals. 
+`firstProgrammer` and `secondProgrammer` are both optional.
 
-```
-text(...[textChunk,])
-```
+**JSX**
 
-- `tagName` A string that specifies the type of element to be created 
-- `props` An object to assign element props/attributes
-- `component` A function to render component
-- `tag` A function to create an element
-- `text` A function to create text
-- `reusableUiPiece` A function returning reusable virtual DOM
-- `textChunk` Either a string or an object which uses text formatters (see below). If any chunk is empty, the whole sentence won't be rendered
-
-### Basic usage
-
-renderer.js
-
-```javascript
-import { createRenderer } from '@gluecodes/glue-dom'
-
-export default createRenderer()
-```
-
-component.js
-```javascript
-import tag from './renderer'
-
-export default tag('div', (props, { text }) => {
-  text('hello world!')
-}) 
-```
-
-#### API
-
-createRenderer()
-
-```javascript
-createRenderer(config)
-```
-
-- `createRenderer()` A function to create initial `tag()` function based on provided `config`
-- `config` (optional) An object containing configuration
-  - `config.createVDomElement` (optional) A function to create virtual DOM element. By default `virtual-dom/h` module is used. 
-  When specified, it should implement HyperScript-like interface/API   
-  - `config.formatters` An object of functions. They may be used in `text()` to wrap given string into `tag` with `props` of `config.formatters[formatterName]() => ({ tag, props })`
-    - `formatterName` A string identifying a formatter which may be used in `text()` like `text({ [formatterName]: 'given string' })`
-    - `tag` A string that specifies the type of element to be used for text wrapping
-    - `props` An object of props to be set on the wrapping element
-  - `config.propEnhancers` An object of functions. They may be used to capture a prop assignation in order to rewrite a tag props object. 
-  It's done by assigning a `prop` on tag props, then if one exists in `config.propEnhancers`, 
-  the prop is passed to: `config.propEnhancers[enhancerName](propValue) => ([reassignedProps])`
-    - `propValue` A mixed value of a prop being assigned  
-    - `enhancerName` A string identifying a propEnhancer which should match a prop name to be "emphasized"
-    - `reassignedProps` An object to be merged into given tag props
-
-createVirtualDomEnhancer()
-
-```javascript
-createVDomEnhancer({
-  customFilter,
-  enhance,
-  filesToLoad,
-  name
-})
-```
-
-- `createVirtualDomEnhancer()` A function to create a prop enhancer that have access to created DOM node. It uses `virtual-dom` hook mechanism (https://github.com/Matt-Esch/virtual-dom/blob/master/docs/hooks.md)
-  - `customFilter` A function to determine whether `enhance()` should be called (`({ node, propValue }) => Boolean`)
-  - `enhance` A function...
-  - `filesToLoad` An object...
-  - `name` A string used for the name of a `virtual-dom` hook prop
-  
-WIP
-
-
-### Readability & maintainability
-
-Compare the below examples in terms of readability and maintainability.
-
-GlueDOM
-
-```javascript
-tag('div', (props, { tag }) => {
-  if (someCondition) {
-    tag('p', (props, { text }) => {
-      text({ emphasized: firstProgrammer }, ', you\'re going to do pair-programming with ', secondProgrammer, '.')
-      text({ emphasized: firstProgrammer }, ', you\'ll code this task by yourself.')
-
-      if (!firstProgrammer && !secondProgrammer) {
-        text('Hey man! Can you tell us your name before we give you job to do?')
-      }
-    })
-  }
-})
-```
-
-JSX
+Since you can't use block statements, you're forced to use unreadable mix of logical and ternary operators.
 
 ```jsx
-return (
+({ 
+  firstProgrammer,
+  secondProgrammer,
+  someCondition
+}) => (
   <div>
     {someCondition
     && (firstProgrammer && secondProgrammer
@@ -160,10 +66,16 @@ return (
 )
 ```
 
-HyperScript
+**HyperScript**
+
+Similarly to JSX, yet to the mix of unreadable ternary operators you're forced to add spread operator.
 
 ```javascript
-return h('div', {}, [
+({ 
+  firstProgrammer,
+  secondProgrammer,
+  someCondition
+}) => h('div', {}, [
   ...(someCondition ? [h('p', {}, [
     ...(firstProgrammer && secondProgrammer ? [
       h('strong', {}, [
@@ -175,7 +87,7 @@ return h('div', {}, [
       h('strong', {}, [
         firstProgrammer
       ]),
-      `, you'll code this task by yourself.`,
+      ', you\'ll code this task by yourself.',
     ] : []),
   ...(!firstProgrammer && !secondProgrammer ? [
       'Hey man! Can you tell us your name before we give you job to do?',
@@ -184,17 +96,79 @@ return h('div', {}, [
 ])
 ```
 
-### Highlighted features
+**GlueDOM**
 
-Given `renderer.js`
+Here you can use block statements. When calling `text`, all its arguments are checked whether they are truthy and only if they are, they will be concatenated and rendered. 
+There is also a concept of formatters which are configured when initializing the top-most `tag`, and they can wrap texts inside a chosen tag and apply CSS classes on it. 
+In this case `bold` is configured to wrap props inside `<strong/>` tag. 
+Nesting is possible by simply nesting objects e.g. `{ bold: { italic: 'some text' } }`.
 
 ```javascript
-import { createRenderer, createVirtualDomEnhancer } from '@gluecodes/glue-dom'
+({ 
+  firstProgrammer,
+  secondProgrammer,
+  someCondition
+}) => tag('div', (props, { tag }) => {
+  if (someCondition) {
+    tag('p', (props, { text }) => {
+      text({ bold: firstProgrammer }, ', you\'re going to do pair-programming with ', secondProgrammer, '.')
+      text({ bold: firstProgrammer }, ', you\'ll code this task by yourself.')
+
+      if (!firstProgrammer && !secondProgrammer) {
+        text('Hey man! Can you tell us your name before we give you job to do?')
+      }
+    })
+  }
+})
+```
+
+### Installation
+
+Run:
+```bash
+yarn add http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-2.0.7.tar.gz
+```
+Or:
+```bash
+npm i http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-2.0.7.tar.gz --save
+```
+
+### Basic usage
+
+`renderer.js`:
+
+```javascript
+import React from 'react'
+import { createRenderer } from '@gluecodes/glueDom'
+
+export default createRenderer({
+  createVDomElement: React.createElement
+})
+```
+
+`component.js`:
+
+```javascript
+import tag from './renderer'
+
+export default () => tag('div', (props, { text }) => {
+  text('hello world!')
+}) 
+```
+
+### Advanced Usage
+
+`renderer.js`:
+
+```javascript
+import React from 'react'
+import { createRenderer, createVirtualDomEnhancer } from '@gluecodes/glueDom'
 import styles from './textFormatters.css'
 
 export default createRenderer({
+  createVDomElement: React.createElement,
   formatters: {
-    emphasized: () => ({
+    bold: () => ({
       tag: 'strong',
       props: { className: styles.bold }
     }),
@@ -202,38 +176,11 @@ export default createRenderer({
       tag: 'span',
       props: { className: styles.italic }
     })
-  },
-  propEnhancers: {
-    autoFocus: createVirtualDomEnhancer({
-      name: 'autoFocus',
-      enhance ({ node }) {
-        node.focus()
-      }
-    }),
-    href: (propValue) => {
-      if (!/^\//.test(propValue)) { return {} }
-
-      return {
-        onclick (e) {
-          e.preventDefault()
-          global.history.pushState({}, null, prop)
-        }
-      }
-    },
-    initGoogleRecaptcha: createVirtualDomEnhancer({
-      name: 'initGoogleRecaptcha',
-      filesToLoad: {
-        googleRecaptchaApi: 'https://www.google.com/recaptcha/api.js?render=explicit'
-      },
-      enhance ({ node, propValue }) {
-        global.grecaptcha.ready(() => global.grecaptcha.render(node, propValue))
-      }
-    })
   }
 })
 ```
 
-#### Rendering complex texts
+`component.js`:
 
 ```javascript
 import tag from './renderer'
@@ -245,69 +192,113 @@ export default ({
   surname
 }) => tag('p', (props, { text }) => {
   text(
-    'You can e.g. format an email like this: "', { emphasized: { italic: email } },
+    'You can e.g. format an email like this: "', { bold: { italic: email } },
     '" and the whole sentence will appear only if the email, firstName: ', firstName, ' and surname: ', surname, 'aren\'t empty. ',
-    'It can be especially useful when generating documents from ', { emphasized: 'dynamic' }, ' fields coming from backend.'
+    'It can be especially useful when generating documents from ', { bold: 'dynamic' }, ' fields coming from backend.'
   )
 })
 ```
 
-#### Enhancing props and referencing generated DOM elements
+	
+### GlueDOM Syntax 
 
-Setting autofocus on a text input
+#### Rendering a tag
 
-```javascript
-import tag from './renderer'
+**Nesting**
 
-export default () => tag('div', (props, { tag }) => {
-  tag('input', {
-    type: 'text',
-    autoFocus: true, // see renderer.propEnhancers.autoFocus
-    onchange: (e) => {
-      console.log(e.target.value)
-    }
+```
+tag(tagName, (props, { component, tag, text }) => { 
+  props.className = 'outerMostTag'
+  
+  tag(tagName, (props, { component, tag, text }) => { 
+    props.className = 'innerTag'
+    
+    tag(tagName, (props, { component, tag, text }) => { 
+      props.className = 'innerMostTag'
+      
+      ...      
+    })
   })
 })
 ```
 
-Specifying a link which uses browser history.pushState()
+**Assigning props to an element containing child elements or text**
 
-```javascript
-import tag from './renderer'
+```
+tag(tagName, (props, { text }) => {
+  props.className = 'someClass'
+  props.title = 'some tooltip'
+  
+  ...
 
-export default () => tag('div', (props, { tag }) => {
-  tag('a', (props, { text }) => {
-    props.href = '/about' // see renderer.propEnhancers.href
-
-    text('some SPA link')
-  })
+  text('some text')
 })
 ```
 
-Embedding external libs e.g. Google ReCaptcha
+**No child elements nor text**
 
-```javascript
-import tag from './renderer'
-
-export default () => tag('div', (props, { tag }) => {
-  tag('div', {
-    className: 'g-recaptcha',
-    initGoogleRecaptcha: { // see renderer.propEnhancers.initGoogleRecaptcha
-      callback: () => {
-        // do something
-      },
-      sitekey: 'some key'
-    }
-  })
+```
+tag(tagName, {
+  [props]
 })
 ```
 
-### Tests
-WIP
+**No child elements nor props**
+```
+tag(tagName)
+```
+
+#### Inside Tag Callback
+
+**Nested Tag**
+
+```
+tag(tagName, ...)
+```
+
+**Components**
+
+```
+component(reusableUiPiece, props)
+```
+
+**Text**
+
+```
+text(...[textChunk,])
+```
+
+- `tagName` A string that specifies the type of element to be created 
+- `props` An object to assign element props/attributes
+- `component` A function to render component
+- `tag` A function to create an element
+- `text` A function to create text
+- `reusableUiPiece` A function returning reusable virtual DOM
+- `textChunk` Either a string or an object which uses text formatters. If any chunk is empty, the whole sentence won't be rendered
+
+### API
+
+```javascript
+createRenderer(config)
+```
+
+- `createRenderer()` A function to create initial `tag()` function based on provided `config`
+- `config` (optional) An object containing configuration
+  - `config.createVDomElement` (optional) A function to create virtual DOM element. By default `virtual-dom/h` module is used. 
+  When specified, it should implement HyperScript-like interface/API   
+  - `config.formatters` An object of functions. They may be used in `text()` to wrap given string into `tag` with `props` of `config.formatters[formatterName]() => ({ tag, props })`
+    - `formatterName` A string identifying a formatter which may be used in `text()` like `text({ [formatterName]: 'given string' })`
+    - `tag` A string that specifies the type of element to be used for text wrapping
+    - `props` An object of props to be set on the wrapping element
+  It's done by assigning a `prop` on tag props, then if one exists in `config.propEnhancers`, 
+  the prop is passed to: `config.propEnhancers[enhancerName](propValue) => ([reassignedProps])`
+    - `propValue` A mixed value of a prop being assigned  
+    - `enhancerName` A string identifying a propEnhancer which should match a prop name to be "emphasized"
+    - `reassignedProps` An object to be merged into given tag props
 
 ### Contributing
 
-Email hello@glue.codes
+Feel free to rise issues, open PRs or contact at hello@glue.codes about any ideas/criticism.
 
 ### License
 
