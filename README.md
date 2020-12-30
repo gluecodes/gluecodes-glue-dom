@@ -12,6 +12,11 @@ Makes non-trivial UI components easy to read and maintain.
 - Allows to format texts without writing nested inline tags.
 - Makes writing dynamic texts easier with no need for checking whether variables are non-empty.
 
+### Playground
+
+- React integration: https://codepen.io/Czopp/pen/qBapvKB
+- HTML to GlueDOM conversion: https://codepen.io/Czopp/pen/zYKRrXo
+
 ### Table of Contents
 
 - [Problem](#problem)
@@ -43,7 +48,7 @@ Consider the following example; Write a function which renders condition-based H
 There is `someCondition` prop which needs to be truthy to display a section which contains other nested conditionals. 
 `firstProgrammer` and `secondProgrammer` are both optional.
 
-**JSX**
+#### JSX
 
 Since you can't use block statements, you're forced to use unreadable mix of logical and ternary operators.
 
@@ -57,7 +62,7 @@ Since you can't use block statements, you're forced to use unreadable mix of log
     {someCondition
     && (firstProgrammer && secondProgrammer
       ? <p><bold>{firstProgrammer}</bold>, you're going to do pair-programming with {secondProgrammer}.</p>
-      : (firstProgrammer
+      : (firstProgrammer && !secondProgrammer
         ? <p><bold>{firstProgrammer}</bold>, you'll code this task by yourself.</p>
         : <p>Hey man! Can you tell us your name before we give you job to do?</p>))
 
@@ -66,7 +71,7 @@ Since you can't use block statements, you're forced to use unreadable mix of log
 )
 ```
 
-**HyperScript**
+#### HyperScript
 
 Similarly to JSX, yet to the mix of unreadable ternary operators you're forced to add spread operator.
 
@@ -83,7 +88,7 @@ Similarly to JSX, yet to the mix of unreadable ternary operators you're forced t
       ]),
       `, you're going to do pair-programming with ${secondProgrammer}.`,
     ] : []),
-    ...(firstProgrammer ? [
+    ...(firstProgrammer && !secondProgrammer ? [
       h('strong', {}, [
         firstProgrammer
       ]),
@@ -96,7 +101,7 @@ Similarly to JSX, yet to the mix of unreadable ternary operators you're forced t
 ])
 ```
 
-**GlueDOM**
+#### GlueDOM
 
 Here you can use block statements. When calling `text`, all its arguments are checked whether they are truthy and only if they are, they will be concatenated and rendered. 
 There is also a concept of formatters which are configured when initializing the top-most `tag`, and they can wrap texts inside a chosen tag and apply CSS classes on it. 
@@ -108,29 +113,34 @@ Nesting is possible by simply nesting objects e.g. `{ bold: { italic: 'some text
   firstProgrammer,
   secondProgrammer,
   someCondition
-}) => tag('div', (props, { tag }) => {
-  if (someCondition) {
-    tag('p', (props, { text }) => {
-      text({ bold: firstProgrammer }, ', you\'re going to do pair-programming with ', secondProgrammer, '.')
-      text({ bold: firstProgrammer }, ', you\'ll code this task by yourself.')
-
-      if (!firstProgrammer && !secondProgrammer) {
-        text('Hey man! Can you tell us your name before we give you job to do?')
-      }
-    })
-  }
-})
+}) => (
+  tag('div', (props, { tag }) => {
+    if (someCondition) {
+      tag('p', (props, { text }) => {
+        text({ bold: firstProgrammer }, ', you\'re going to do pair-programming with ', secondProgrammer, '.')
+        
+        if (!secondProgrammer) {
+          text({ bold: { italic: firstProgrammer } }, ', you\'ll code this task by yourself.')
+        }
+        
+        if (!firstProgrammer && !secondProgrammer) {
+          text('Hey man! Can you tell us your name before we give you job to do?')
+        }
+      })
+    }
+  })
+)
 ```
 
 ### Installation
 
 Run:
 ```bash
-yarn add http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-2.0.7.tar.gz
+yarn add http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-2.0.8.tar.gz
 ```
 Or:
 ```bash
-npm i http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-2.0.7.tar.gz --save
+npm i http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-2.0.8.tar.gz --save
 ```
 
 ### Basic usage
@@ -190,13 +200,15 @@ export default ({
   firstName,
   interests,
   surname
-}) => tag('p', (props, { text }) => {
-  text(
-    'You can e.g. format an email like this: "', { bold: { italic: email } },
-    '" and the whole sentence will appear only if the email, firstName: ', firstName, ' and surname: ', surname, 'aren\'t empty. ',
-    'It can be especially useful when generating documents from ', { bold: 'dynamic' }, ' fields coming from backend.'
-  )
-})
+}) => (
+  tag('p', (props, { text }) => {
+    text(
+      'You can format an email like this: "', { bold: { italic: email } },
+      '" and the whole sentence will appear only if email: ', email, ', firstName: ', firstName, ' and surname: ', surname, 'aren\'t empty. ',
+      'It can be especially useful when generating documents from ', { bold: 'dynamic' }, ' fields coming from backend.'
+    )
+  })
+)
 ```
 
 	
@@ -290,11 +302,6 @@ createRenderer(config)
     - `formatterName` A string identifying a formatter which may be used in `text()` like `text({ [formatterName]: 'given string' })`
     - `tag` A string that specifies the type of element to be used for text wrapping
     - `props` An object of props to be set on the wrapping element
-  It's done by assigning a `prop` on tag props, then if one exists in `config.propEnhancers`, 
-  the prop is passed to: `config.propEnhancers[enhancerName](propValue) => ([reassignedProps])`
-    - `propValue` A mixed value of a prop being assigned  
-    - `enhancerName` A string identifying a propEnhancer which should match a prop name to be "emphasized"
-    - `reassignedProps` An object to be merged into given tag props
 
 ### Contributing
 
