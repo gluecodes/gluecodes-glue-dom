@@ -8,17 +8,16 @@ describe('defaults', () => {
     const tagName = undefined
     const nestedRenderOrProps = undefined
     const config = {
-      createVDomElement: undefined,
+      createDomElement: undefined,
       formatters: undefined,
       propEnhancers: undefined
     }
-    const tag = createRenderer()
+    const tag = createRenderer(config)
 
     try {
       tag(
         tagName,
-        nestedRenderOrProps,
-        config
+        nestedRenderOrProps
       )
 
       done(new Error('should throw an error'))
@@ -32,19 +31,18 @@ describe('defaults', () => {
     const tagName = 'span'
     const nestedRenderOrProps = undefined
     const config = {
-      createVDomElement: undefined,
+      createDomElement: (tagName, props, ...children) => ({ tagName, properties: props, children }),
       formatters: undefined,
       propEnhancers: undefined
     }
-    const tag = createRenderer()
+    const tag = createRenderer(config)
 
     const result = tag(
       tagName,
-      nestedRenderOrProps,
-      config
+      nestedRenderOrProps
     )
 
-    expect(result).to.nested.include({ tagName: 'SPAN' })
+    expect(result).to.nested.include({ tagName: 'span' })
     expect(result).to.have.nested.property('properties').that.is.an('object').and.is.empty
     expect(result).to.have.nested.property('children').that.is.an('array').and.is.empty
   })
@@ -54,19 +52,18 @@ describe('defaults', () => {
     const tagName = 'span'
     const nestedRenderOrProps = { className: EX_CLASS_NAME }
     const config = {
-      createVDomElement: undefined,
+      createDomElement: (tagName, props, ...children) => ({ tagName, properties: props, children }),
       formatters: undefined,
       propEnhancers: undefined
     }
-    const tag = createRenderer()
+    const tag = createRenderer(config)
 
     const result = tag(
       tagName,
-      nestedRenderOrProps,
-      config
+      nestedRenderOrProps
     )
 
-    expect(result).to.nested.include({ tagName: 'SPAN' })
+    expect(result).to.nested.include({ tagName: 'span' })
     expect(result).to.nested.include({ 'properties.className': EX_CLASS_NAME })
     expect(result).to.have.nested.property('children').that.is.an('array').and.is.empty
   })
@@ -79,20 +76,19 @@ describe('defaults', () => {
       tag('span')
     }
     const config = {
-      createVDomElement: undefined,
+      createDomElement: (tagName, props, ...children) => ({ tagName, properties: props, children }),
       formatters: undefined,
       propEnhancers: undefined
     }
-    const tag = createRenderer()
+    const tag = createRenderer(config)
 
     const result = tag(
       tagName,
-      nestedRenderOrProps,
-      config
+      nestedRenderOrProps
     )
 
-    expect(result).to.nested.include({ tagName: 'DIV' })
+    expect(result).to.nested.include({ tagName: 'div' })
     expect(result).to.nested.include({ 'properties.className': EX_CLASS_NAME })
-    expect(result).to.nested.include({ 'children[0].tagName': 'SPAN' })
+    expect(result).to.nested.include({ 'children[0].tagName': 'span' })
   })
 })
