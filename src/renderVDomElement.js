@@ -1,7 +1,3 @@
-import h from 'virtual-dom/h'
-
-const defaultVDomCreator = (name, props, ...children) => h(name, props, children)
-
 const renderVDomElement = (
   tagName,
   nestedRenderOrProps = null,
@@ -12,7 +8,7 @@ const renderVDomElement = (
   }
 
   const {
-    createVDomElement = defaultVDomCreator,
+    createDomElement,
     formatters = {}
   } = config
 
@@ -89,7 +85,7 @@ const renderVDomElement = (
 
           const wrappingTag = wrappers
             .reverse()
-            .reduce((a, { tag, props }, index) => createVDomElement(...(
+            .reduce((a, { tag, props }, index) => createDomElement(...(
               index === 0 ? [tag, props, value] : [tag, props, a]
             )), undefined)
 
@@ -99,7 +95,7 @@ const renderVDomElement = (
     })
   }
 
-  return createVDomElement(...creatorArgList)
+  return createDomElement(...creatorArgList)
 }
 
 export default renderVDomElement

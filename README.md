@@ -4,6 +4,8 @@
 
 Makes non-trivial UI components easy to read and maintain.
 
+Also, bye bye Virtual DOM! Instead, we're shifting our solutions towards compilation-time DOM diffing using [Solid](https://github.com/ryansolid/solid)
+
 <p align="center"><img width="100%" src="https://github.com/gluecodes/gluecodes-glue-dom/blob/master/glue-dom.png" alt="GlueDOM"></p>
 
 - Gradual learning curve, no need to learn another templating syntax (directives etc.).
@@ -11,11 +13,6 @@ Makes non-trivial UI components easy to read and maintain.
 - Isn't a mix of HTML and JavaScript drawing a clear border between view and logic.
 - Allows to format texts without writing nested inline tags.
 - Makes writing dynamic texts easier with no need for checking whether variables are non-empty.
-
-### Playground
-
-- React integration: https://codepen.io/Czopp/pen/qBapvKB
-- HTML to GlueDOM conversion: https://codepen.io/Czopp/pen/zYKRrXo
 
 ### Table of Contents
 
@@ -36,10 +33,10 @@ Makes non-trivial UI components easy to read and maintain.
 
 ### Problem
 
-The ideal syntax for rendering Virtual DOM should mimic HTML in a way it reads sequentially from top to bottom.
+The ideal syntax for rendering DOM should mimic HTML in a way it reads sequentially from top to bottom.
 For single logical UI unit, there shouldn't be a need for local variable declarations or using partial functions. 
 
-Consider the two most common ways of rendering Virtual DOM; JSX and HyperScript. They work well in simple demo scenarios with no nested conditional logic. 
+Consider the two most common ways of rendering DOM; JSX and HyperScript. They work well in simple demo scenarios with no nested conditional logic. 
 When the nested conditionals are required, you end up using a mix of logical expressions, ternary and spread operators.
 
 ### Syntax Comparison
@@ -136,11 +133,11 @@ Nesting is possible by simply nesting objects e.g. `{ bold: { italic: 'some text
 
 Run:
 ```bash
-yarn add http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-2.0.8.tar.gz
+yarn add http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-3.0.0.tar.gz
 ```
 Or:
 ```bash
-npm i http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-2.0.8.tar.gz --save
+npm i http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-3.0.0.tar.gz --save
 ```
 
 ### Basic usage
@@ -172,7 +169,7 @@ export default () => tag('div', (props, { text }) => {
 
 ```javascript
 import React from 'react'
-import { createRenderer, createVirtualDomEnhancer } from '@gluecodes/glueDom'
+import { createRenderer } from '@gluecodes/glueDom'
 import styles from './textFormatters.css'
 
 export default createRenderer({
@@ -285,7 +282,7 @@ text(...[textChunk,])
 - `component` A function to render component
 - `tag` A function to create an element
 - `text` A function to create text
-- `reusableUiPiece` A function returning reusable virtual DOM
+- `reusableUiPiece` A function returning reusable DOM
 - `textChunk` Either a string or an object which uses text formatters. If any chunk is empty, the whole sentence won't be rendered
 
 ### API
@@ -296,7 +293,7 @@ createRenderer(config)
 
 - `createRenderer()` A function to create initial `tag()` function based on provided `config`
 - `config` (optional) An object containing configuration
-  - `config.createVDomElement` (optional) A function to create virtual DOM element. By default `virtual-dom/h` module is used. 
+  - `config.createDomElement` (optional) A function to create DOM element. 
   When specified, it should implement HyperScript-like interface/API   
   - `config.formatters` An object of functions. They may be used in `text()` to wrap given string into `tag` with `props` of `config.formatters[formatterName]() => ({ tag, props })`
     - `formatterName` A string identifying a formatter which may be used in `text()` like `text({ [formatterName]: 'given string' })`
