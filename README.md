@@ -33,7 +33,7 @@ Also, bye bye Virtual DOM! Instead, we're shifting our solutions towards compila
 
 ### Problem
 
-The ideal syntax for rendering DOM should mimic HTML in a way it reads sequentially from top to bottom.
+The ideal syntax for rendering DOM should mimic HTML in a way it reads sequentially from top to bottom. 
 For single logical UI unit, there shouldn't be a need for local variable declarations or using partial functions. 
 
 Consider the two most common ways of rendering DOM; JSX and HyperScript. They work well in simple demo scenarios with no nested conditional logic. 
