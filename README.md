@@ -208,7 +208,7 @@ export default ({
 ```
 
 	
-###GlueDOM Syntax 
+### GlueDOM Syntax 
 
 ### Rendering a tag
 
