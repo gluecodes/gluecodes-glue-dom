@@ -1,6 +1,6 @@
 {
   "name": "@gluecodes/glueDom",
-  "version": "3.0.0",
+  "version": "1.0.1",
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "GlueCodes LTD",
   "description": "Makes non-trivial UI components easy to read and maintain",
