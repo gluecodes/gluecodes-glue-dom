@@ -1,20 +1,19 @@
-# @gluecodes
-
-## GlueDOM
+# @gluecodes/glueDom
 
 Makes non-trivial UI components easy to read and maintain.
 
-Also, bye bye Virtual DOM! Instead, we're shifting our solutions towards compilation-time DOM diffing using [Solid](https://github.com/ryansolid/solid)
+It has been made to abstract-away [SolidJS'](http://solidjs.com/) HyperScript to generate reactive code in [GlueCodes Studio](https://ide.glue.codes) on the fly.
 
 <p align="center"><img width="100%" src="https://github.com/gluecodes/gluecodes-glue-dom/blob/master/glue-dom.png" alt="GlueDOM"></p>
 
+- It can be transformed in maintainable and scalable manner.
 - Gradual learning curve, no need to learn another templating syntax (directives etc.).
 - Reads sequentially as HTML while remaining readable and maintainable.
 - Isn't a mix of HTML and JavaScript drawing a clear border between view and logic.
-- Allows to format texts without writing nested inline tags.
+- Allows formatting texts without writing nested inline tags.
 - Makes writing dynamic texts easier with no need for checking whether variables are non-empty.
 
-### Table of Contents
+## Table of Contents
 
 - [Problem](#problem)
 - [Syntax Comparison](#syntax-comparison)
@@ -31,7 +30,7 @@ Also, bye bye Virtual DOM! Instead, we're shifting our solutions towards compila
 - [Contributing](#contributing)
 - [License](#license)
 
-### Problem
+## Problem
 
 The ideal syntax for rendering DOM should mimic HTML in a way it reads sequentially from top to bottom. 
 For single logical UI unit, there shouldn't be a need for local variable declarations or using partial functions. 
@@ -39,13 +38,13 @@ For single logical UI unit, there shouldn't be a need for local variable declara
 Consider the two most common ways of rendering DOM; JSX and HyperScript. They work well in simple demo scenarios with no nested conditional logic. 
 When the nested conditionals are required, you end up using a mix of logical expressions, ternary and spread operators.
 
-### Syntax Comparison
+## Syntax Comparison
 
 Consider the following example; Write a function which renders condition-based HTML. 
 There is `someCondition` prop which needs to be truthy to display a section which contains other nested conditionals. 
 `firstProgrammer` and `secondProgrammer` are both optional.
 
-#### JSX
+### JSX
 
 Since you can't use block statements, you're forced to use unreadable mix of logical and ternary operators.
 
@@ -68,7 +67,7 @@ Since you can't use block statements, you're forced to use unreadable mix of log
 )
 ```
 
-#### HyperScript
+### HyperScript
 
 Similarly to JSX, yet to the mix of unreadable ternary operators you're forced to add spread operator.
 
@@ -98,7 +97,7 @@ Similarly to JSX, yet to the mix of unreadable ternary operators you're forced t
 ])
 ```
 
-#### GlueDOM
+### GlueDOM
 
 Here you can use block statements. When calling `text`, all its arguments are checked whether they are truthy and only if they are, they will be concatenated and rendered. 
 There is also a concept of formatters which are configured when initializing the top-most `tag`, and they can wrap texts inside a chosen tag and apply CSS classes on it. 
@@ -129,18 +128,18 @@ Nesting is possible by simply nesting objects e.g. `{ bold: { italic: 'some text
 )
 ```
 
-### Installation
+## Installation
 
 Run:
 ```bash
-yarn add http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-3.0.0.tar.gz
+yarn add https://ide.glue.codes/repos/df67f7a82cbdc5efffcb31c519a48bf6/core/glueDom-1.0.1.tar.gz
 ```
 Or:
 ```bash
-npm i http://gluecodes-components.s3-website-eu-west-1.amazonaws.com/glueDom-3.0.0.tar.gz --save
+npm i https://ide.glue.codes/repos/df67f7a82cbdc5efffcb31c519a48bf6/core/glueDom-1.0.1.tar.gz --save
 ```
 
-### Basic usage
+## Basic usage
 
 `renderer.js`:
 
@@ -149,7 +148,7 @@ import React from 'react'
 import { createRenderer } from '@gluecodes/glueDom'
 
 export default createRenderer({
-  createVDomElement: React.createElement
+  createDomElement: React.createElement
 })
 ```
 
@@ -163,7 +162,7 @@ export default () => tag('div', (props, { text }) => {
 }) 
 ```
 
-### Advanced Usage
+## Advanced Usage
 
 `renderer.js`:
 
@@ -173,7 +172,7 @@ import { createRenderer } from '@gluecodes/glueDom'
 import styles from './textFormatters.css'
 
 export default createRenderer({
-  createVDomElement: React.createElement,
+  createDomElement: React.createElement,
   formatters: {
     bold: () => ({
       tag: 'strong',
@@ -209,9 +208,9 @@ export default ({
 ```
 
 	
-### GlueDOM Syntax 
+###GlueDOM Syntax 
 
-#### Rendering a tag
+### Rendering a tag
 
 **Nesting**
 
@@ -285,7 +284,7 @@ text(...[textChunk,])
 - `reusableUiPiece` A function returning reusable DOM
 - `textChunk` Either a string or an object which uses text formatters. If any chunk is empty, the whole sentence won't be rendered
 
-### API
+## API
 
 ```javascript
 createRenderer(config)
@@ -300,10 +299,10 @@ createRenderer(config)
     - `tag` A string that specifies the type of element to be used for text wrapping
     - `props` An object of props to be set on the wrapping element
 
-### Contributing
+## Contributing
 
 Feel free to rise issues, open PRs or contact at hello@glue.codes about any ideas/criticism.
 
-### License
+## License
 
 [MIT](https://github.com/gluecodes/gluecodes-glue-dom/blob/master/LICENSE.md)
